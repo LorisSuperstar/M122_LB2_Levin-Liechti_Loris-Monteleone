@@ -1,86 +1,87 @@
-# M122 - Task E: Live Asset Portfolio Monitor
+# M122 - Aufgabe E: Live-Portfolio-Wertverfolgungssystem
 
-This solution implements a comprehensive asset monitoring and valuation system using Bash automation. It periodically retrieves live market prices for multiple asset classes (Novartis equity holdings, USD reserves, and Bitcoin digital assets), integrates real-time exchange rate data through open API endpoints, computes portfolio valuations and performance metrics, and maintains persistent transaction records for trend analysis.
+Diese Lösung implementiert ein umfassendes Vermögensüberwachungs- und Bewertungssystem mittels Bash-Automatisierung. Das System ruft regelmässig Live-Marktpreise für mehrere Anlageklassen ab (Novartis-Aktienbestände, USD-Reserven und Bitcoin-Digitalanlagen), integriert Echtzeit-Wechselkursdaten über offene API-Schnittstellen, berechnet Portfolio-Bewertungen und Performance-Metriken und verwaltet persistente Transaktionsdatensätze zur Trendanalyse.
 
-## Architecture & System Overview
+## Systemarchitektur & Übersicht
 
-The automation framework consists of several integrated modules designed according to M122 specifications:
+Das Automatisierungsgerüst besteht aus mehreren integrierten Modulen, entwickelt gemäss M122-Spezifikationen:
 
-*   **Primary Orchestration Module (`run_portfolio.sh`):** Orchestrates the entire workflow including data retrieval, computations, persistence, audit logging, compression, and notification generation.
-*   **Environment Settings (`portfolio.cfg`):** Stores portfolio composition, initial acquisition valuations in CHF, and file reference paths.
-*   **Execution Audit Trail (`portfolio.log`):** Records all operations, timestamps, and diagnostic information for troubleshooting and verification.
-*   **Portfolio Ledger (`portfolio_records.csv`):** Maintains chronological transaction records and valuations in CSV format for historical analysis.
-*   **API Response Cache (`source_data.zip`):** Archives raw JSON responses from external data sources for verification and audit purposes.
-*   **System Report (`report.mail`):** Generates formatted summary reports simulating administrative notifications.
-*   **Integration Test Suite (`verify_sources.sh`):** Validation and debugging utility for API connectivity and data parsing.
-
----
-
-## Third-Party Data Sources (Public Access, No Authentication)
-
-1.  **Cryptocurrency Market Rates (BTC/CHF):** `https://api.coinbase.com/v2/prices/BTC-CHF/spot`
-2.  **Currency Exchange Rates (USD/CHF):** `https://api.coinbase.com/v2/prices/USD-CHF/spot`
-3.  **Equity Securities Pricing (NOVN.SW, CHF):** Yahoo Finance REST API (`https://query1.finance.yahoo.com/v8/finance/chart/NOVN.SW?interval=1d&range=1d`)
+*   **Primäres Orchestrierungsmodul (`run_portfolio.sh`):** Koordiniert den gesamten Arbeitsablauf einschliesslich Datenbeschaffung, Berechnungen, Persistierung, Audit-Protokollierung, Kompression und Berichterstellung.
+*   **Umgebungseinstellungen (`portfolio.cfg`):** Speichert Portfolio-Zusammensetzung, ursprüngliche Erwerbsbewertungen in CHF und Dateiverweis-Pfade.
+*   **Ausführungs-Audit-Trail (`portfolio.log`):** Erfasst alle Operationen, Zeitstempel und Diagnoseinformationen zu Fehlerbehebung und Verifikation.
+*   **Portfolio-Hauptbuch (`portfolio_records.csv`):** Verwaltet chronologische Transaktionsdatensätze und Bewertungen im CSV-Format zur historischen Analyse.
+*   **API-Antwort-Cache (`source_data.zip`):** Archiviert Roh-JSON-Responses von externen Datenquellen zur Verifikation und Audit-Zwecken.
+*   **Systembericht (`report.mail`):** Generiert formatierte Zusammenfassungsberichte, die administrative Benachrichtigungen simulieren.
+*   **Integrationstestsuite (`verify_sources.sh`):** Validierungs- und Debug-Utility zur Überprüfung von API-Konnektivität und Datenanalyse.
 
 ---
 
-## Initial Setup & Customization
+## Datenquellen von Dritten (öffentlich zugänglich, keine Authentifizierung erforderlich)
 
-Asset composition is configured in the `portfolio.cfg` manifest:
+1.  **Kryptowährungs-Marktpreise (BTC/CHF):** `https://api.coinbase.com/v2/prices/BTC-CHF/spot`
+2.  **Währungswechselkurse (USD/CHF):** `https://api.coinbase.com/v2/prices/USD-CHF/spot`
+3.  **Wertpapierpreise (NOVN.SW, CHF):** Yahoo Finance REST API (`https://query1.finance.yahoo.com/v8/finance/chart/NOVN.SW?interval=1d&range=1d`)
+
+---
+
+## Initialsetup & Anpassung
+
+Die Vermögensbestände werden in der Konfigurationsdatei `portfolio.cfg` definiert:
 
 ```bash
-# Novartis equity position and original cost basis
+# Novartis-Aktienposition und ursprüngliche Kostenbasis
 EQUITY_UNITS=10
 EQUITY_ORIG_CHF=850.00
 
-# Fiat currency reserve and original cost basis
+# Fiat-Währungsreserve und ursprüngliche Kostenbasis
 FIAT_UNITS=3000
 FIAT_ORIG_CHF=2750.00
 
-# Digital currency holding and original cost basis
+# Digitale Währung und ursprüngliche Kostenbasis
 CRYPTO_UNITS=0.1
 CRYPTO_ORIG_CHF=4500.00
 ```
 
 ---
 
-## Runtime Options & Invocation
+## Runtime-Optionen & Ausführung
 
-The automation can be executed interactively or scheduled. Supported command-line parameters:
+Die Automatisierung kann interaktiv oder zeitgesteuert ausgeführt werden. Unterstützte Befehlszeilenparameter:
 
 ```bash
-# Display documentation
+# Dokumentation anzeigen
 bash run_portfolio.sh --help
 
-# Standard execution (loads portfolio.cfg from current directory)
+# Standardausführung (lädt portfolio.cfg aus aktuellem Verzeichnis)
 bash run_portfolio.sh
 
-# Specify alternate configuration source
-bash run_portfolio.sh --config /alternate/path/custom.cfg
+# Alternative Konfigurationsquelle angeben
+bash run_portfolio.sh --config /pfad/zur/benutzerdefiniert.cfg
 
-# Override log file and data ledger destinations
-bash run_portfolio.sh --log /alternate/audit.log --history /alternate/ledger.csv
+# Log-Datei und Daten-Ledger-Ziele überschreiben
+bash run_portfolio.sh --log /pfad/zum/audit.log --history /pfad/zum/ledger.csv
 ```
 
 ---
 
-## Scheduled Execution (Cron Integration)
+## Zeitgesteuerte Ausführung (Cron-Integration)
 
-To implement continuous portfolio monitoring (for example, twice daily automated snapshots):
+Um kontinuierliche Portfolio-Überwachung (beispielsweise zweimal täglich automatische Snapshots) zu implementieren:
 
-1.  Access the crontab editor:
+1.  Öffnen Sie den Crontab-Editor:
      ```bash
      crontab -e
      ```
-2.  Insert a schedule entry (adjust paths for your system):
+2.  Fügen Sie einen Planungseintrag ein (passen Sie Pfade für Ihr System an):
      ```bash
-     0 */12 * * * /bin/bash /path/to/E_refactored-portfolio-tracker/run_portfolio.sh
+     0 */12 * * * /bin/bash /pfad/zu/Loris_code/run_portfolio.sh
      ```
 
 ---
 
-## AI Assistant Acknowledgment
+## KI-Assistent-Bestätigung
 
-Development, testing, and optimization of this solution involved collaboration with machine learning-assisted tools.
-*   **Implementation & Refinement:** Fundamental architecture, control flow logic, and data transformation pipelines were collaboratively designed.
-*   **Quality Assurance:** Data source validation, JSON parsing robustness, and performance profiling were verified through comprehensive testing and diagnostic tooling.
+Entwicklung, Tests und Optimierung dieser Lösung erfolgten in Zusammenarbeit mit KI-gestützten Tools. Weitere Details zur KI-Nutzung finden Sie in `KI_VERWENDUNG.md`.
+
+*   **Implementierung & Verfeinerung:** Grundlegende Architektur, Steuerungsflusslogik und Datentransformations-Pipelines wurden kollaborativ entwickelt.
+*   **Qualitätssicherung:** Datenquellen-Validierung, JSON-Parsing-Robustheit und Performance-Profiling wurden mittels umfassender Tests und Diagnose-Tools verifiziert.
