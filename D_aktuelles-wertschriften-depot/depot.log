@@ -19,3 +19,10 @@
 2026-06-22 12:51:04 [INFO] Raw data zipped to /mnt/c/users/levin/code/schule/M122_LB2/D_aktuelles-wertschriften-depot/data.zip
 2026-06-22 12:51:04 [INFO] Calculation successful. Total: 8782.80 CHF, Profit: 682.80 CHF (8.43%)
 2026-06-22 12:51:04 [INFO] Mock email updated in /mnt/c/users/levin/code/schule/M122_LB2/D_aktuelles-wertschriften-depot/info.mail
+2026-06-29 08:34:35 [INFO] Starting Wertschriften-Depot run.
+2026-06-29 08:34:35 [INFO] Fetching Bitcoin rate from Coinbase API...
+2026-06-29 08:34:35 [INFO] Fetching USD rate from Coinbase API...
+2026-06-29 08:34:36 [INFO] Fetching Novartis rate from Yahoo Finance...
+2026-06-29 08:34:36 [INFO] Raw data zipped to /mnt/c/Projects/Web App/React/M122_LB2/D_aktuelles-wertschriften-depot/data.zip
+2026-06-29 08:34:36 [INFO] Calculation successful. Total: 8548.32 CHF, Profit: 448.32 CHF (5.53%)
+2026-06-29 08:34:36 [INFO] Mock email updated in /mnt/c/Projects/Web App/React/M122_LB2/D_aktuelles-wertschriften-depot/info.mail
